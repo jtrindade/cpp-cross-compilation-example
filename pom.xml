@@ -1,0 +1,54 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+
+	<groupId>pt.ipl.isel.cc.jtrindade</groupId>
+	<artifactId>cpp-cross-compilation-example</artifactId>
+	<version>1.0-SNAPSHOT</version>
+	<packaging>exe</packaging>
+
+	<name>C++ Cross-Compilation in Linux for Windows</name>
+
+	<!--
+		Windows:
+			- install mingw64-w64
+			- set cc-executable to g++
+
+		CentOS/RHEL:
+			- install mingw64-gcc and mingw64-gcc-c++
+			- set cc-executable to x86_64-w64-mingw32-g++
+	-->
+
+	<properties>
+		<version.native-maven-plugin>1.0-alpha-11</version.native-maven-plugin>
+		<cc-executable>x86_64-w64-mingw32-g++</cc-executable>
+	</properties>
+
+	<build>
+		<defaultGoal>native:compile native:link</defaultGoal>
+		<plugins>
+			<plugin>
+				<groupId>org.codehaus.mojo</groupId>
+				<artifactId>native-maven-plugin</artifactId>
+				<version>${version.native-maven-plugin}</version>
+				<extensions>true</extensions>
+				<configuration>
+					<compilerProvider>generic</compilerProvider>
+					<compilerExecutable>${cc-executable}</compilerExecutable>
+					<linkerExecutable>${cc-executable}</linkerExecutable>
+					<sources>
+						<source>
+							<directory>src/main/native</directory>
+							<fileNames>
+								<fileName>hello.cpp</fileName>
+							</fileNames>
+						</source>
+					</sources>
+				</configuration>
+			</plugin>
+		</plugins>
+	</build>
+
+</project>
+
